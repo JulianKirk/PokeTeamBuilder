@@ -1,0 +1,43 @@
+h1 {
+    font-family: Silkscreen, Arial;
+    text-align: center;
+}
+
+.PokemonImage {
+    background-color: rgb(0, 0, 0);
+    border-radius: 20px;
+}
+
+.PokemonImage img {
+    height: 95%;
+    width: 95%;
+    padding: 2.5%;
+    /* This should stretch to fit most of the div but leave some space for the background*/
+}
+
+.Select-Wrap {
+    border: 1px solid #777;
+    border-radius: 4px;
+    padding: 0 5px;
+    width:200px;
+    background-color:#fff;
+    position:relative;
+}
+
+.Select-Wrap label{
+    font-size:12px;
+    text-transform: uppercase;
+    color: #777;
+    padding: 0px 8px 0px 2px;  
+    position: absolute;
+    top:6px;
+}
+
+select{
+    background-color: #fff;
+    border:0px;
+    height:55px;
+    font-size: 16px;
+    width: 100%;
+    padding: 20px 4px; 
+}
