@@ -11,4 +11,8 @@ function displayPokemon(data)
     console.log(data);
 }
 
+function initializeOptions() {
+    
+}
+
 getPokemon("ditto");
