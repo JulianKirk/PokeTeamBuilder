@@ -1,3 +1,6 @@
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+
 function getPokemon(name) //Name is case sensitive (full lowercase only) 
 {
     fetch(`https://pokeapi.co/api/v2/pokemon/${name}`)
