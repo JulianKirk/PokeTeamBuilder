@@ -24,6 +24,8 @@ h1 {
     width:200px;
     background-color:#fff;
     position:relative;
+    margin-top: 5px;
+    margin-bottom: 5px; 
 }
 
 .Select-Wrap label{

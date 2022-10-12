@@ -1,7 +1,5 @@
 {
   "dependencies": {
-    "live-server": "^1.2.2",
-    "react": "^18.2.0",
-    "reactdom": "^2.0.0"
+    "live-server": "^1.2.2"
   }
 }
