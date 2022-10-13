@@ -4,7 +4,7 @@ function getPokemon(name, outputFunc) //Name is case sensitive (full lowercase o
 {
     fetch(`https://pokeapi.co/api/v2/pokemon/${name}`)
     .then((response) => response.json())
-    .then((data) => (outputFunc(data)))
+    .then(async (data) => (await outputFunc(data)))
     .catch((err) => console.log("Pokemon not found", err));
 }
 
@@ -14,19 +14,25 @@ function displayPokemon(data)
 }
 
 function returnPokeName(data) {
-    console.log(data.name);
     return data.name;
 }
 
-function initializeOptions() {
+function initializeOptions(callback) {
+    let pokeList = [];
+
     fetch(`https://pokeapi.co/api/v2/pokemon-species/?limit=0`)
     .then(response => response.json())
-    .then((data) => {
+    .then(async (data) => {
         for (let i = 1; i < data.count; i++) 
         {
             document.querySelector("#PokemonNameSelector").innerHTML +=
             `
-                <Option>${getPokemon(i, returnPokeName)}</Option>
+                <Option>${await function() {
+                    fetch(`https://pokeapi.co/api/v2/pokemon/${i}`)
+                    .then((response) => response.json())
+                    .then(function(data) {console.log(data.name);return data.name})
+                    .catch((err) => console.log("Pokemon not found", err));
+                }}</Option>
             `
             ; 
         }
@@ -36,4 +42,3 @@ function initializeOptions() {
 
 getPokemon("ditto", displayPokemon);
 initializeOptions();
-console.log(document.querySelector("#PokemonNameSelector").innerHTML)
