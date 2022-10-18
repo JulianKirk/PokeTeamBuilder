@@ -47,6 +47,14 @@ select{
 }
 
 .PokemonContent {
-    width: 210px;
+    width: 205px;
     height: 210px;
+    
+    border-style: solid;
+    border-width: 3px;
+    border-color:rgb(0, 0, 0);
+    border-radius: 15px;
+}
+.PokemonContent p{
+    margin-left: 10px;
 }

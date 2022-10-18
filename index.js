@@ -13,31 +13,41 @@ function displayPokemon(data)
     console.log(data);
 }
 
-function returnPokeName(data) {
-    return data.name;
-}
-
 function initializeOptions(callback) {
-    let pokeList = [];
+    // document.querySelector("#PokemonNameSelector").innerHTML = "";
 
     fetch(`https://pokeapi.co/api/v2/pokemon-species/?limit=0`)
     .then(response => response.json())
     .then(async (data) => {
         for (let i = 1; i < data.count; i++) 
         {
-            document.querySelector("#PokemonNameSelector").innerHTML +=
-            `
-                <Option>${await function() {
-                    fetch(`https://pokeapi.co/api/v2/pokemon/${i}`)
-                    .then((response) => response.json())
-                    .then(function(data) {console.log(data.name);return data.name})
-                    .catch((err) => console.log("Pokemon not found", err));
-                }}</Option>
-            `
-            ; 
+            fetch(`https://pokeapi.co/api/v2/pokemon/${i}`)
+            .then((response) => response.json())
+            .then(function(data) {
+                document.querySelector("#PokemonNameSelector").innerHTML +=
+                `<Option value = "${data.name}">${data.name}</Option>`;
+            })
+            .catch((err) => console.log("Pokemon not found", err));
         }
     })
     .catch((err) => console.log("Pokemon count cannot be found", err));
+}
+
+function updateContentBox() {
+    let content = document.querySelector("#PokeContentBox");
+    let pokeName = document.querySelector("#PokemonNameSelector").options[select.selectedIndex].value;
+    ` 
+    <p>
+        PokemonName: document.querySelector("#PokemonNameSelector").
+    </p>
+    `
+    fetch(`https://pokeapi.co/api/v2/pokemon/${pokeName}`)
+            .then((response) => response.json())
+            .then(function(data) {
+                content.innerHTML +=
+                `<p>Name: ${pokeName} \n Weaknesses: </p>`;
+            })
+            .catch((err) => console.log("Pokemon not found", err));
 }
 
 getPokemon("ditto", displayPokemon);
