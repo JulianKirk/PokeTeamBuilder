@@ -15,7 +15,7 @@ function displayPokemon(data)
 
 function updateContentBox() {
     let content = document.querySelector("#PokeContentBox");
-    var nameSelectBox = document.querySelector("#PokemonNameSelector");
+    let nameSelectBox = document.querySelector("#PokemonNameSelector");
 
     let pokeName = nameSelectBox.options[nameSelectBox.selectedIndex]?.value;
     pokeName = pokeName == undefined ? "bulbasaur" : pokeName;
@@ -24,11 +24,15 @@ function updateContentBox() {
             .then((response) => response.json())
             .then(function(data) {
                 content.innerHTML =
-                `<p>Name: ${pokeName} \n 
-                Type(s): ${data.types[0].type.name} \n 
-                Weaknesses: ${data}</p>`;
+                `<p>
+                Name: ${pokeName} \n 
+                Type(s): ${data.types[0].type.name}; ${data.types[1].type?.name ?? ""} \n
+                Weaknesses: ${data}
+                </p>`; //Double check/test that the types work correctly. Maybe change the type to show in the corresponding box graphic
             })
             .catch((err) => console.log("Pokemon not found", err));
+
+    
 }
 
 function initializeOptions(callback) {
