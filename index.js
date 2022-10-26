@@ -13,8 +13,9 @@ function displayPokemon(data)
     console.log(data);
 }
 
-function updateContentBox() {
+function updateContent() {
     let content = document.querySelector("#PokeContentBox");
+    let pokeImage = document.querySelector("#pokeImage");
     let nameSelectBox = document.querySelector("#PokemonNameSelector");
 
     let pokeName = nameSelectBox.options[nameSelectBox.selectedIndex]?.value;
@@ -25,10 +26,12 @@ function updateContentBox() {
             .then(function(data) {
                 content.innerHTML =
                 `<p>
-                Name: ${pokeName} \n 
-                Type(s): ${data.types[0].type.name}; ${data.types[1].type?.name ?? ""} \n
+                Name: ${pokeName} <br>
+                Type(s): ${data.types[0].type.name}; ${data.types[1].type?.name ?? ""} <br>
                 Weaknesses: ${data}
-                </p>`; //Double check/test that the types work correctly. Maybe change the type to show in the corresponding box graphic
+                </p>`; //Later change the types to show on the box graphic
+                
+                pokeImage.source = data.sprites.front_default;
             })
             .catch((err) => console.log("Pokemon not found", err));
 
@@ -49,7 +52,7 @@ function initializeOptions(callback) {
                 document.querySelector("#PokemonNameSelector").innerHTML +=
                 `<Option value = "${data.name}">${data.name}</Option>`;
             })
-            .then(updateContentBox())
+            .then(updateContent)
             .catch((err) => console.log('Pokemon' + i + 'cannot be found/added to the list', err));
         }
     })
@@ -57,7 +60,7 @@ function initializeOptions(callback) {
 }
 
 //#region Detect Changes / Events
-    document.querySelector("#PokemonNameSelector").onchange = updateContentBox;
+    document.querySelector("#PokemonNameSelector").onchange = updateContent; //This is not working for some reason
 //#endregion
 
 
