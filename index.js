@@ -13,10 +13,28 @@ function displayPokemon(data)
     console.log(data);
 }
 
+function updateContentBox() {
+    let content = document.querySelector("#PokeContentBox");
+    var nameSelectBox = document.querySelector("#PokemonNameSelector");
+
+    let pokeName = nameSelectBox.options[nameSelectBox.selectedIndex]?.value;
+    pokeName = pokeName == undefined ? "bulbasaur" : pokeName;
+
+    fetch(`https://pokeapi.co/api/v2/pokemon/${pokeName}`)
+            .then((response) => response.json())
+            .then(function(data) {
+                content.innerHTML =
+                `<p>Name: ${pokeName} \n 
+                Type(s): ${data.types[0].type.name} \n 
+                Weaknesses: ${data}</p>`;
+            })
+            .catch((err) => console.log("Pokemon not found", err));
+}
+
 function initializeOptions(callback) {
     // document.querySelector("#PokemonNameSelector").innerHTML = "";
 
-    fetch(`https://pokeapi.co/api/v2/pokemon-species/?limit=0`)
+    fetch(`https://pokeapi.co/api/v2/pokemon-species/?limit=0`) 
     .then(response => response.json())
     .then(async (data) => {
         for (let i = 1; i < data.count; i++) 
@@ -27,28 +45,17 @@ function initializeOptions(callback) {
                 document.querySelector("#PokemonNameSelector").innerHTML +=
                 `<Option value = "${data.name}">${data.name}</Option>`;
             })
-            .catch((err) => console.log("Pokemon not found", err));
+            .then(updateContentBox())
+            .catch((err) => console.log('Pokemon' + i + 'cannot be found/added to the list', err));
         }
     })
-    .catch((err) => console.log("Pokemon count cannot be found", err));
+    .catch((err) => console.log("Pokemon count cannot be found!", err)); 
 }
 
-function updateContentBox() {
-    let content = document.querySelector("#PokeContentBox");
-    let pokeName = document.querySelector("#PokemonNameSelector").options[select.selectedIndex].value;
-    ` 
-    <p>
-        PokemonName: document.querySelector("#PokemonNameSelector").
-    </p>
-    `
-    fetch(`https://pokeapi.co/api/v2/pokemon/${pokeName}`)
-            .then((response) => response.json())
-            .then(function(data) {
-                content.innerHTML +=
-                `<p>Name: ${pokeName} \n Weaknesses: </p>`;
-            })
-            .catch((err) => console.log("Pokemon not found", err));
-}
+//#region Detect Changes / Events
+    document.querySelector("#PokemonNameSelector").onchange = updateContentBox;
+//#endregion
+
 
 getPokemon("ditto", displayPokemon);
 initializeOptions();
