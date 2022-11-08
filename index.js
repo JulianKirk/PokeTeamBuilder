@@ -15,7 +15,7 @@ function displayPokemon(data)
 
 function updateContent() {
     let content = document.querySelector("#PokeContentBox");
-    let pokeImage = document.querySelector("#pokeImage");
+    let pokeImage = document.querySelector(".PokemonImage"); //DO SOMETHING ABOUT THIS
     let nameSelectBox = document.querySelector("#PokemonNameSelector");
 
     let pokeName = nameSelectBox.options[nameSelectBox.selectedIndex]?.value;
@@ -31,7 +31,10 @@ function updateContent() {
                 Weaknesses: ${data}
                 </p>`; //Later change the types to show on the box graphic
                 
-                pokeImage.source = data.sprites.front_default;
+                pokeImage.innerHTML = 
+                `<image src = "${data.sprites.front_default}" alt = "Image of the pokemon"></image>
+                ;`
+                
             })
             .catch((err) => console.log("Pokemon not found", err));
 
