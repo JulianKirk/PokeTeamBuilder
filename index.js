@@ -1,4 +1,4 @@
-root = document.querySelector("#root")
+PokemonOne = document.querySelector("#PokemonOne")
 
 function getPokemon(name, outputFunc) //Name is case sensitive (full lowercase only) 
 {
@@ -13,10 +13,10 @@ function displayPokemon(data)
     console.log(data);
 }
 
-function updateContent() {
-    let content = document.querySelector("#PokeContentBox");
-    let pokeImage = document.querySelector(".PokemonImage"); //DO SOMETHING ABOUT THIS
-    let nameSelectBox = document.querySelector("#PokemonNameSelector");
+function updateContent(currentPokemon) {
+    let content = currentPokemon.querySelector("#PokeContentBox");
+    let pokeImage = currentPokemon.querySelector(".PokemonImage"); //DO SOMETHING ABOUT THIS
+    let nameSelectBox = currentPokemon.querySelector("#PokemonNameSelector");
 
     let pokeName = nameSelectBox.options[nameSelectBox.selectedIndex]?.value;
     pokeName = pokeName == undefined ? "bulbasaur" : pokeName;
@@ -41,9 +41,7 @@ function updateContent() {
     
 }
 
-function initializeOptions(callback) {
-    // document.querySelector("#PokemonNameSelector").innerHTML = "";
-
+function initializeOptions(currentPokemon) {
     fetch(`https://pokeapi.co/api/v2/pokemon-species/?limit=0`) 
     .then(response => response.json())
     .then(async (data) => {
@@ -52,10 +50,10 @@ function initializeOptions(callback) {
             fetch(`https://pokeapi.co/api/v2/pokemon/${i}`)
             .then((response) => response.json())
             .then(function(data) {
-                document.querySelector("#PokemonNameSelector").innerHTML +=
+                currentPokemon.querySelector("#PokemonNameSelector").innerHTML +=
                 `<Option value = "${data.name}">${data.name}</Option>`;
             })
-            .then(updateContent)
+            .then(updateContent(currentPokemon))
             .catch((err) => console.log('Pokemon' + i + 'cannot be found/added to the list', err));
         }
     })
@@ -63,9 +61,9 @@ function initializeOptions(callback) {
 }
 
 //#region Detect Changes / Events
-    document.querySelector("#PokemonNameSelector").onchange = updateContent; //This is not working for some reason
+    PokemonOne.querySelector("#PokemonNameSelector").onchange = updateContent(PokemonOne); //This is not working for some reason
 //#endregion
 
 
 getPokemon("ditto", displayPokemon);
-initializeOptions();
+initializeOptions(PokemonOne);
