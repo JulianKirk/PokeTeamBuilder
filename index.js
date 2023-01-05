@@ -8,18 +8,16 @@ function getPokemon(name, outputFunc) //Name is case sensitive (full lowercase o
     .catch((err) => console.log("Pokemon not found", err));
 }
 
-function displayPokemon(data) 
-{
-    console.log(data);
-}
-
 function updateContent(currentPokemon) {
+    console.log("content being updated")
     let content = currentPokemon.querySelector("#PokeContentBox");
-    let pokeImage = currentPokemon.querySelector(".PokemonImage"); //DO SOMETHING ABOUT THIS
+    let pokeImage = currentPokemon.querySelector("#PokemonImage");
     let nameSelectBox = currentPokemon.querySelector("#PokemonNameSelector");
 
     let pokeName = nameSelectBox.options[nameSelectBox.selectedIndex]?.value;
-    pokeName = pokeName == undefined ? "bulbasaur" : pokeName;
+    console.log(pokeName);
+    pokeName = pokeName == undefined ? "bulbasaur" : pokeName; //WHY WON'T ANYTHING BUT BULBASAUR WORK
+    console.log(pokeName);
 
     fetch(`https://pokeapi.co/api/v2/pokemon/${pokeName}`)
             .then((response) => response.json())
@@ -28,7 +26,7 @@ function updateContent(currentPokemon) {
                 `<p>
                 Name: ${pokeName} <br>
                 Type(s): ${data.types[0].type.name}; ${data.types[1].type?.name ?? ""} <br>
-                Weaknesses: ${data}
+                Weaknesses: example weaknesses
                 </p>`; //Later change the types to show on the box graphic
                 
                 pokeImage.innerHTML = 
@@ -42,9 +40,9 @@ function updateContent(currentPokemon) {
 }
 
 function initializeOptions(currentPokemon) {
-    fetch(`https://pokeapi.co/api/v2/pokemon-species/?limit=0`) 
+    fetch(`https://pokeapi.co/api/v2/pokemon-species`) //Removed the "?limit=0"
     .then(response => response.json())
-    .then(async (data) => {
+    .then((data) => { //There was an "async" here before but i'm not sure why        
         for (let i = 1; i < data.count; i++) 
         {
             fetch(`https://pokeapi.co/api/v2/pokemon/${i}`)
@@ -53,10 +51,10 @@ function initializeOptions(currentPokemon) {
                 currentPokemon.querySelector("#PokemonNameSelector").innerHTML +=
                 `<Option value = "${data.name}">${data.name}</Option>`;
             })
-            .then(updateContent(currentPokemon))
             .catch((err) => console.log('Pokemon' + i + 'cannot be found/added to the list', err));
         }
     })
+    //.then(updateContent(currentPokemon)) //NOT SURE IF THIS IS EVEN RUNNING
     .catch((err) => console.log("Pokemon count cannot be found!", err)); 
 }
 
@@ -64,6 +62,4 @@ function initializeOptions(currentPokemon) {
     PokemonOne.querySelector("#PokemonNameSelector").onchange = updateContent(PokemonOne); //This is not working for some reason
 //#endregion
 
-
-getPokemon("ditto", displayPokemon);
 initializeOptions(PokemonOne);
