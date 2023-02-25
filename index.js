@@ -1,5 +1,9 @@
 PokemonOne = document.querySelector("#PokemonOne");
 PokemonTwo = document.querySelector("#PokemonTwo");
+PokemonThree = document.querySelector("#PokemonThree");
+PokemonFour = document.querySelector("#PokemonFour");
+PokemonFive = document.querySelector("#PokemonFive");
+PokemonSix = document.querySelector("#PokemonSix");
 
 function getPokemon(name, outputFunc) //Name is case sensitive (full lowercase only) 
 {
@@ -46,59 +50,64 @@ function updateContent(currentPokemon) {
     
 }
 
-function initializeOptions(currentPokemon) {
-    fetch(`https://pokeapi.co/api/v2/pokemon-species`) //Removed the "?limit=0"
+function initializeOptions(currentPokemon, pokeNames) {
+    pokeNames.forEach((name, index) => {
+        currentPokemon.querySelector("#PokemonNameSelector").innerHTML += 
+            `<Option value = "${name}">${name}</Option>`;
+    })
+
+    updateContent(currentPokemon);
+}
+
+async function obtainOptions()
+{
+    let pokemonNameOptions = []
+
+    let speciesPromise = fetch(`https://pokeapi.co/api/v2/pokemon-species`) //Removed the "?limit=0"
     .then(response => response.json())
     .then(async (data) => { 
-        let promises= [];  
+        let promises = []
         for (let i = 1; i < data.count; i++) 
         {
             let promise = fetch(`https://pokeapi.co/api/v2/pokemon/${i}`)
                 .then((response) => response.json())
-                .then(function(data) {
-                    currentPokemon.querySelector("#PokemonNameSelector").innerHTML +=
-                    `<Option value = "${data.name}">${data.name}</Option>`;
+                .then(function(pokeData) { 
+                    pokemonNameOptions.push(pokeData.name);
                 })
                 .catch((err) => console.log('Pokemon' + i + 'cannot be found/added to the list', err));
             promises.push(promise);
         }
         await Promise.all(promises);
-        updateContent(currentPokemon);
     })
-    .catch((err) => console.log("Pokemon count cannot be found!", err)); 
-}
-
-async function obtainOptions()
-{
-    let promises = []
-
-    let pokemonNameOptions = []
-    fetch(`https://pokeapi.co/api/v2/pokemon-species`) //Removed the "?limit=0"
-    .then(response => response.json())
-    .then((data) => { 
-        for (let i = 1; i < data.count; i++) 
-        {
-            let promise = fetch(`https://pokeapi.co/api/v2/pokemon/${i}`)
-                .then((response) => response.json())
-                .then(function(data) { pokemonNameOptions.push(data.name)})
-                .catch((err) => console.log('Pokemon' + i + 'cannot be found/added to the list', err));
-            promises.push(promise);
-        }
-    })
+    .catch((err) => console.log("Pokemon list cannot be found!", err)); 
+    
+    await speciesPromise;
 
     let attackOptions = []
 
-    await Promise.all(promises);
+    console.log("ABOUT TO INITIALIZE");
+    console.log(pokemonNameOptions);
 
-    initializeOptions(PokemonOne);
-    initializeOptions(PokemonTwo);
+    initializeOptions(PokemonOne, pokemonNameOptions);
+    initializeOptions(PokemonTwo, pokemonNameOptions);
+    initializeOptions(PokemonThree, pokemonNameOptions);
+    initializeOptions(PokemonFour, pokemonNameOptions);
+    initializeOptions(PokemonFive, pokemonNameOptions);
+    initializeOptions(PokemonSix, pokemonNameOptions);
+
+
+    console.log("DONE INITIALIZING");
 }
 
 //#region Detect Changes / Events
     PokemonOne.querySelector("#PokemonNameSelector").onchange = () => updateContent(PokemonOne);
     PokemonTwo.querySelector("#PokemonNameSelector").onchange = () => updateContent(PokemonTwo);
+    PokemonThree.querySelector("#PokemonNameSelector").onchange = () => updateContent(PokemonThree);
+    PokemonFour.querySelector("#PokemonNameSelector").onchange = () => updateContent(PokemonFour);
+    PokemonFive.querySelector("#PokemonNameSelector").onchange = () => updateContent(PokemonFive);
+    PokemonSix.querySelector("#PokemonNameSelector").onchange = () => updateContent(PokemonSix);
+
 //#endregion
 
-// obtainOptions();
-initializeOptions(PokemonOne);
+obtainOptions();
 

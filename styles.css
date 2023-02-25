@@ -55,6 +55,22 @@ select{
     border-color:rgb(0, 0, 0);
     border-radius: 15px;
 }
+
 .PokemonContent p{
     margin-left: 10px;
+}
+
+.PokemonContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1%;
+}
+
+.PokeContainers {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
 }
