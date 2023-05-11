@@ -51,11 +51,11 @@ function updateContent(currentPokemon) {
                 if(data.types.length == 1) 
                 {
                     types = data.types[0].type.name;
-                    weaknesses = weaknessDict[data.types[0].type.name];
+                    weaknesses = weaknessDict[data.types[0].type.name].join(", ");
                 } else 
                 {
                     types = `${data.types[0].type.name}, ${data.types[1].type.name}`;
-                    weaknesses = `${weaknessDict[data.types[0].type.name]}, ${weaknessDict[data.types[1].type.name]}`;
+                    weaknesses = `${weaknessDict[data.types[0].type.name].join(", ")}, ${weaknessDict[data.types[1].type.name].join(", ")}`;
                 }
 
                 content.innerHTML =
