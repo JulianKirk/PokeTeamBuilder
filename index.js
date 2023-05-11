@@ -13,6 +13,27 @@ function getPokemon(name, outputFunc) //Name is case sensitive (full lowercase o
     .catch((err) => console.log("Pokemon not found", err));
 }
 
+const weaknessDict = {
+    "fire" : ["water", "ground", "rock"],
+    "water" : ["grass", "electric"],
+    "ground" : ["water", "grass", "ice"],
+    "ice" : ["fire", "fighting", "rock", "steel"],
+    "dark" : ["fighting", "bug", "fairy"],
+    "electric" : ["ground"],
+    "flying" : ["electric", "ice", "rock"],
+    "psychic" : ["bug", "ghost", "dark"],
+    "fighting": ["flying", "psychic", "fairy"],
+    "rock" : ["water", "grass", "fighting", "ground", "steel"],
+    "normal" : ["fighting"],
+    "grass" : ["fire", "ice", "poison", "flying", "bug"],
+    "poison": ["ground", "psychic"],
+    "bug" : ["fire", "flying", "rock"],
+    "ghost": ["ghost", "dark"],
+    "dragon": ["ice", "dragon", "fairy"],
+    "steel" : ["fire", "fighting", "ground"],
+    "fairy" : ["poison", "steel"]
+}
+
 function updateContent(currentPokemon) {
     console.log("content being updated")
     let content = currentPokemon.querySelector("#PokeContentBox");
@@ -24,22 +45,27 @@ function updateContent(currentPokemon) {
     fetch(`https://pokeapi.co/api/v2/pokemon/${pokeName}`)
             .then((response) => response.json())
             .then(function(data) {
-                let types = ""
+                let types = "";
+                let weaknesses = "";
 
                 if(data.types.length == 1) 
                 {
-                    types = data.types[0].type.name
+                    types = data.types[0].type.name;
+                    weaknesses = weaknessDict[data.types[0].type.name];
                 } else 
                 {
-                    types = `${data.types[0].type.name}, ${data.types[1].type.name}`
+                    types = `${data.types[0].type.name}, ${data.types[1].type.name}`;
+                    weaknesses = `${weaknessDict[data.types[0].type.name]}, ${weaknessDict[data.types[1].type.name]}`;
                 }
 
                 content.innerHTML =
                 `<p>
                 Name: ${pokeName} <br>
                 Type(s): ${types} <br>
-                Weaknesses: example weaknesses
-                </p>`; //Later change the types to show on the box graphic
+                Weaknesses: ${weaknesses}
+                </p>`; 
+                //Later change the types to show on the box graphic
+                //Eval is meant to convert the string to syntax
                 
                 pokeImage.innerHTML = 
                 `<image src = "${data.sprites.front_default}" alt = "Image of the pokemon"></image>`
